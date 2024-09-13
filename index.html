@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>사사학교 커뮤니티 목록</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Jua', sans-serif;
+    }
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+    .jumbotron {
+      margin-bottom: 0;
+    }
+    footer {
+      background-color: rgb(58, 116, 174);
+      padding: 25px;
+    }
+    .panel {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1>사사학교 커뮤니티 목록</h1>
+    <p>저장된 모든 커뮤니티 정보를 확인하세요.</p>
+  </div>
+</div>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                      
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="add.html">Add</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">    
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">저장된 커뮤니티 정보</div>
+        <div class="panel-body" id="infoDisplay">
+          <p>커뮤니티 정보가 없습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><br>
+
+<footer class="container-fluid text-center">
+  <p>&copy; 2024 사사학교. All rights reserved.</p>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const communities = JSON.parse(localStorage.getItem('communities')) || [];
+    
+    const infoDisplay = document.getElementById('infoDisplay');
+    if (communities.length > 0) {
+      infoDisplay.innerHTML = '';
+      communities.forEach((community, index) => {
+        const communityInfo = `
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <a href="view.html?index=${index}" style="text-decoration: none; color: inherit;">
+                ${community.cname}
+              </a>
+            </div>
+          </div>
+        `;
+        infoDisplay.innerHTML += communityInfo;
+      });
+    } else {
+      infoDisplay.innerHTML = '<p>커뮤니티 정보가 없습니다.</p>';
+    }
+  });
+</script>
+
+</body>
+</html>

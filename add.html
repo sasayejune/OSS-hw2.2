@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>새로운 커뮤니티 만들기</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Jua', sans-serif;
+      text-align: center;
+    }
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+    .jumbotron {
+      margin-bottom: 0;
+    }
+    footer {
+      background-color: rgb(58, 116, 174);
+      padding: 25px;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1>새로운 커뮤니티 만들기</h1>
+  </div>
+</div>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                       
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="add.html">Add</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<form id="communityForm">
+  <label for="num">기수<br></label>
+  <input type="text" id="num" name="num" required>
+  <span class="error" id="numError"></span>
+  <br><br>
+  <label for="cname">커뮤니티 이름<br></label>
+  <input type="text" id="cname" name="cname" required>
+  <span class="error" id="cnameError"></span>
+  <br><br>
+  <label for="meaning">이름의 뜻<br></label>
+  <input type="text" id="meaning" name="meaning" required>
+  <span class="error" id="meaningError"></span>
+  <br><br>
+  <label for="mbti">말씀 <br></label>
+  <input type="text" id="mbti" name="mbti" required>
+  <span class="error" id="mbtiError"></span>
+  <br><br>
+  <label for="Gender">파송 여부 / <br></label>
+  파송생 <input type="radio" name="YesOrNo" value="Yes" required>
+  재학생 <input type="radio" name="YesOrNo" value="No" required>
+  <span class="error" id="yesOrNoError"></span>
+  <br><br>
+  <button type="button" onclick="saveData()">추가</button>
+  <br><br>
+</form>
+
+<footer class="container-fluid text-center"></footer>
+
+<script>
+function validateForm() {
+  let isValid = true;
+
+  // Clear previous error messages
+  document.getElementById('numError').textContent = '';
+  document.getElementById('cnameError').textContent = '';
+  document.getElementById('meaningError').textContent = '';
+  document.getElementById('mbtiError').textContent = '';
+  document.getElementById('yesOrNoError').textContent = '';
+
+  // Validate each field
+  const num = document.getElementById('num').value.trim();
+  const cname = document.getElementById('cname').value.trim();
+  const meaning = document.getElementById('meaning').value.trim();
+  const mbti = document.getElementById('mbti').value.trim();
+  const yesOrNo = document.querySelector('input[name="YesOrNo"]:checked');
+
+  if (!num) {
+    document.getElementById('numError').textContent = '기수를 입력하세요.';
+    isValid = false;
+  }
+  if (!cname) {
+    document.getElementById('cnameError').textContent = '커뮤니티 이름을 입력하세요.';
+    isValid = false;
+  }
+  if (!meaning) {
+    document.getElementById('meaningError').textContent = '이름의 뜻을 입력하세요.';
+    isValid = false;
+  }
+  if (!mbti) {
+    document.getElementById('mbtiError').textContent = '말씀을 입력하세요.';
+    isValid = false;
+  }
+  if (!yesOrNo) {
+    document.getElementById('yesOrNoError').textContent = '파송 여부를 선택하세요.';
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+function saveData() {
+  if (!validateForm()) {
+    return; // Stop if validation fails
+  }
+
+  if (!confirm('추가하시겠습니까?')) {
+    return; 
+  }
+
+  const num = document.getElementById('num').value;
+  const cname = document.getElementById('cname').value;
+  const meaning = document.getElementById('meaning').value;
+  const mbti = document.getElementById('mbti').value;
+  const yesOrNo = document.querySelector('input[name="YesOrNo"]:checked').value;
+
+  const communities = JSON.parse(localStorage.getItem('communities')) || [];
+
+  const newCommunity = {
+    num,
+    cname,
+    meaning,
+    mbti,
+    yesOrNo
+  };
+
+  communities.push(newCommunity);
+  localStorage.setItem('communities', JSON.stringify(communities));
+
+  alert("데이터가 저장되었습니다!");
+  window.location.href = 'index.html';
+}
+
+</script>
+
+</body>
+</html>
