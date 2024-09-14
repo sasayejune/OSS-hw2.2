@@ -1,0 +1,51 @@
+/* my.css */
+
+/* 기본 스타일 */
+body {
+    font-family: 'Jua', sans-serif;
+  }
+  
+  /* 패널 및 버튼 스타일 */
+  .panel {
+    margin-top: 20px;
+  }
+  
+  /* 데스크탑 용 스타일 */
+  @media (min-width: 768px) {
+    .jumbotron {
+      padding: 60px 0;
+    }
+    
+    .navbar {
+      margin-bottom: 50px;
+    }
+  }
+  
+  /* 모바일 용 스타일 */
+  @media (max-width: 767px) {
+    .jumbotron {
+      padding: 30px 0;
+    }
+  
+    .navbar-header {
+      float: none;
+    }
+  
+    .navbar-collapse {
+      border: none !important;
+      box-shadow: none !important;
+    }
+  
+    .navbar-nav {
+      float: none !important;
+    }
+  
+    .navbar-nav > li {
+      float: none;
+    }
+  
+    .panel-body {
+      padding: 15px; /* 모바일에서 패널 내부 여백 조정 */
+    }
+  }
+  
