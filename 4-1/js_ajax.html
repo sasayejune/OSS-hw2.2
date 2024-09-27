@@ -1,53 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <title>사사학교 커뮤니티 목록</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script>
-    window.onload = function() {
-      let btnStu = document.getElementById("btnStu");
-      btnStu.addEventListener("click", getStudents);
-    }
-    
-    function getStudents() {
-      let contents = document.getElementById("contents");
-      const xhr = new XMLHttpRequest();
-
-      xhr.open("GET", "http://localhost:3000/students")
-      xhr.setRequestHeader("content-type", "application/json");
-      xhr.send();
-
-      xhr.onload = () => {
-        if(xhr.status === 200){
-          const res = JSON.parse(xhr.response);
-          contents.innerHTML = makeList(res);
-        } else {
-          console.log(xhr.status, xhr.statusText);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 관리 시스템</title>
+    <script>
+        window.onload = function() {
+            document.getElementById("btnGet").addEventListener("click", getStudents);
+            document.getElementById("btnAdd").addEventListener("click", addStudent);
+            document.getElementById("btnUpdate").addEventListener("click", updateStudent);
+            document.getElementById("btnDelete").addEventListener("click", deleteStudent);
         }
-      }
-    }
 
-    function makeList(data) {
-      let str = "<uv>";
-        for (key in data){
-          //console.log("Name :" + data[key].name + " , age :" + data[key].age);
-          str += "<li>" + data[key].name + " (" + data[key].age + ")</li>";
-
+        function getStudents() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://localhost:3000/students");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const res = JSON.parse(xhr.response);
+                    displayStudents(res.students);
+                } else {
+                    console.error(xhr.status, xhr.statusText);
+                }
+            };
+            xhr.send();
         }
-        str += "<ul>";
-          return str;
-    }
-  </script>
+
+        function displayStudents(students) {
+            const contents = document.getElementById("contents");
+            contents.innerHTML = "";
+            students.forEach(student => {
+                contents.innerHTML += `<li>${student.name} (${student.age}) - ID: ${student.id}</li>`;
+            });
+        }
+
+        function addStudent() {
+            const name = document.getElementById("studentName").value;
+            const age = document.getElementById("studentAge").value;
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:3000/students", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onload = function() {
+                if (xhr.status === 201) {
+                    getStudents(); // 새로 고침
+                }
+            };
+            const data = JSON.stringify({ name, age });
+            xhr.send(data);
+        }
+
+        function updateStudent() {
+            const id = document.getElementById("studentId").value;
+            const name = document.getElementById("studentName").value;
+            const age = document.getElementById("studentAge").value;
+            const xhr = new XMLHttpRequest();
+            xhr.open("PUT", `http://localhost:3000/students/${id}`, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    getStudents(); // 새로 고침
+                }
+            };
+            const data = JSON.stringify({ name, age });
+            xhr.send(data);
+        }
+
+        function deleteStudent() {
+            const id = document.getElementById("studentId").value;
+            const xhr = new XMLHttpRequest();
+            xhr.open("DELETE", `http://localhost:3000/students/${id}`, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    getStudents(); // 새로 고침
+                }
+            };
+            xhr.send();
+        }
+    </script>
 </head>
-
 <body>
-  <button id="btnStu">학생 데이터 가져오기</button>
-  <div id="contents" style="width:200px;height:200px;background-color: lightgoldenrodeyelloew;"></div>
+    <h1>학생 관리 시스템</h1>
+    <button id="btnGet">학생 목록 가져오기</button>
+    <div id="contents" style="width: 300px; height: 200px; border: 1px solid #000; overflow-y: auto;"></div>
 
-
-
+    <h2>학생 추가 / 수정</h2>
+    <input type="text" id="studentName" placeholder="이름">
+    <input type="text" id="studentAge" placeholder="나이">
+    <input type="number" id="studentId" placeholder="ID (수정/삭제 시)">
+    <button id="btnAdd">학생 추가</button>
+    <button id="btnUpdate">학생 수정</button>
+    <button id="btnDelete">학생 삭제</button>
 </body>
 </html>
