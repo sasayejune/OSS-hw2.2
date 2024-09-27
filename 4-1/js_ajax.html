@@ -6,89 +6,95 @@
     <title>학생 관리 시스템</title>
     <script>
         window.onload = function() {
-            document.getElementById("btnGet").addEventListener("click", getStudents);
-            document.getElementById("btnAdd").addEventListener("click", addStudent);
-            document.getElementById("btnUpdate").addEventListener("click", updateStudent);
-            document.getElementById("btnDelete").addEventListener("click", deleteStudent);
+            document.getElementById("btnGetStudents").addEventListener("click", getStudents);
+            document.getElementById("btnGetCourses").addEventListener("click", getCourses);
+            document.getElementById("btnGetEnrollments").addEventListener("click", getEnrollments);
+            document.getElementById("btnGetProfessors").addEventListener("click", getProfessors);
         }
 
         function getStudents() {
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "http://localhost:3000/students");
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    const res = JSON.parse(xhr.response);
-                    displayStudents(res.students);
-                } else {
-                    console.error(xhr.status, xhr.statusText);
-                }
-            };
-            xhr.send();
-        }
+              const xhr = new XMLHttpRequest();
+              xhr.open("GET", "http://localhost:3000/students"); // 학생 목록 URL
+              xhr.onload = function() {
+                  if (xhr.status === 200) {
+                      const res = JSON.parse(xhr.response);
+                      displayData(res.students, "studentContents");
+                  } else {
+                      console.error("Error fetching students: ", xhr.statusText);
+                  }
+              };
+              xhr.send();
+          }
 
-        function displayStudents(students) {
-            const contents = document.getElementById("contents");
-            contents.innerHTML = "";
-            students.forEach(student => {
-                contents.innerHTML += `<li>${student.name} (${student.age}) - ID: ${student.id}</li>`;
+          function getCourses() {
+              const xhr = new XMLHttpRequest();
+              xhr.open("GET", "http://localhost:3000/courses"); // 강의 목록 URL
+              xhr.onload = function() {
+                  if (xhr.status === 200) {
+                      const res = JSON.parse(xhr.response);
+                      displayData(res.courses, "courseContents");
+                  } else {
+                      console.error("Error fetching courses: ", xhr.statusText);
+                  }
+              };
+              xhr.send();
+          }
+
+          function getEnrollments() {
+              const xhr = new XMLHttpRequest();
+              xhr.open("GET", "http://localhost:3000/enrollments"); // 수강 목록 URL
+              xhr.onload = function() {
+                  if (xhr.status === 200) {
+                      const res = JSON.parse(xhr.response);
+                      displayData(res.enrollments, "enrollmentContents");
+                  } else {
+                      console.error("Error fetching enrollments: ", xhr.statusText);
+                  }
+              };
+              xhr.send();
+          }
+
+          function getProfessors() {
+              const xhr = new XMLHttpRequest();
+              xhr.open("GET", "http://localhost:3000/professors"); // 교수 목록 URL
+              xhr.onload = function() {
+                  if (xhr.status === 200) {
+                      const res = JSON.parse(xhr.response);
+                      displayData(res.professors, "professorContents");
+                  } else {
+                      console.error("Error fetching professors: ", xhr.statusText);
+                  }
+              };
+              xhr.send();
+          }
+
+
+        function displayData(data, elementId) {
+            const contents = document.getElementById(elementId);
+            contents.innerHTML = ""; // 기존 내용 삭제
+            data.forEach(item => {
+                let itemHTML = "<div style='margin: 5px; border: 1px solid #ccc; padding: 10px; border-radius: 5px;'>";
+                for (const key in item) {
+                    itemHTML += `<strong>${key}:</strong> ${item[key]}<br>`;
+                }
+                itemHTML += "</div>";
+                contents.innerHTML += itemHTML;
             });
-        }
-
-        function addStudent() {
-            const name = document.getElementById("studentName").value;
-            const age = document.getElementById("studentAge").value;
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "http://localhost:3000/students", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onload = function() {
-                if (xhr.status === 201) {
-                    getStudents(); // 새로 고침
-                }
-            };
-            const data = JSON.stringify({ name, age });
-            xhr.send(data);
-        }
-
-        function updateStudent() {
-            const id = document.getElementById("studentId").value;
-            const name = document.getElementById("studentName").value;
-            const age = document.getElementById("studentAge").value;
-            const xhr = new XMLHttpRequest();
-            xhr.open("PUT", `http://localhost:3000/students/${id}`, true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    getStudents(); // 새로 고침
-                }
-            };
-            const data = JSON.stringify({ name, age });
-            xhr.send(data);
-        }
-
-        function deleteStudent() {
-            const id = document.getElementById("studentId").value;
-            const xhr = new XMLHttpRequest();
-            xhr.open("DELETE", `http://localhost:3000/students/${id}`, true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    getStudents(); // 새로 고침
-                }
-            };
-            xhr.send();
         }
     </script>
 </head>
 <body>
     <h1>학생 관리 시스템</h1>
-    <button id="btnGet">학생 목록 가져오기</button>
-    <div id="contents" style="width: 300px; height: 200px; border: 1px solid #000; overflow-y: auto;"></div>
+    <button id="btnGetStudents">학생 목록 가져오기</button>
+    <div id="studentContents" style="border: 1px solid #000; margin: 10px; padding: 10px;"></div>
 
-    <h2>학생 추가 / 수정</h2>
-    <input type="text" id="studentName" placeholder="이름">
-    <input type="text" id="studentAge" placeholder="나이">
-    <input type="number" id="studentId" placeholder="ID (수정/삭제 시)">
-    <button id="btnAdd">학생 추가</button>
-    <button id="btnUpdate">학생 수정</button>
-    <button id="btnDelete">학생 삭제</button>
+    <button id="btnGetCourses">강의 목록 가져오기</button>
+    <div id="courseContents" style="border: 1px solid #000; margin: 10px; padding: 10px;"></div>
+
+    <button id="btnGetEnrollments">수강 목록 가져오기</button>
+    <div id="enrollmentContents" style="border: 1px solid #000; margin: 10px; padding: 10px;"></div>
+
+    <button id="btnGetProfessors">교수 목록 가져오기</button>
+    <div id="professorContents" style="border: 1px solid #000; margin: 10px; padding: 10px;"></div>
 </body>
 </html>

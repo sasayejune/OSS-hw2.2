@@ -2,7 +2,7 @@
     "courses": [
         { "id": 1, "cname": "Open source studio", "credit": 3 },
         { "id": 2, "cname": "Programming studio", "credit": 2 },
-        { "id": 3, "cname": "Descrete Mathematics", "credit": 2 },
-        { "id": 4, "cname": "Chapel", "credit": 1 }
+        { "id": 3, "cname": "Web Development", "credit": 4 },
+        { "id": 4, "cname": "Data Science", "credit": 3 }
     ]
 }
