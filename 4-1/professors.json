@@ -1,7 +1,0 @@
-{
-    "professors": [
-        { "id": 1, "name": "Mr. Smith", "subject": "Mathematics" },
-        { "id": 2, "name": "Ms. Johnson", "subject": "Science" },
-        { "id": 3, "name": "Dr. Brown", "subject": "History" }
-    ]
-}
